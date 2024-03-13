@@ -1,6 +1,7 @@
+from datetime import datetime
 from objects.Record import Record
 from objects.AddressBook import AddressBook
-from datetime import datetime
+
 
 def input_error(func):
     def inner(*args, **kwargs):

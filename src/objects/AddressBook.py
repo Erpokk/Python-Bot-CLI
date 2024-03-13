@@ -1,13 +1,14 @@
 from datetime import datetime
-from objects.Name import Name
 from objects.Phone import Phone
 from objects.Birthday import Birthday
 from objects.Address import Address
 from objects.Email import Email
+from servises.SaveService import SaveService
 
 class AddressBook:
-    def __init__(self):
+    def __init__(self, save_service: SaveService):
         self._records = {}
+        self._save_service = save_service
 
     def add_record(self, record):
         self._records[record.name.value] = record

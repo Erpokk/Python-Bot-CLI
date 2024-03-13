@@ -1,13 +1,14 @@
 from objects.AddressBook import AddressBook
 from objects.Note import Note
+from servises.SaveService import SaveService
 import bot_functions
 
 
-
-
 def main():
-    book = AddressBook()
-    notes = Note()
+    
+    save_service = SaveService()
+    book = AddressBook(save_service)
+    notes = Note(save_service)
     
     commands = {
         "add": lambda args: bot_functions.add_contact_command(args, book),
@@ -17,8 +18,9 @@ def main():
         "hello": lambda args: bot_functions.hello_command(args),
         "all": lambda args: bot_functions.show_all_contacts_command(args, book),
         "search": lambda args: bot_functions.search_contacts_command(args, book),
-        "add-note": lambda args: bot_functions.add_note_command(args, book),
+        
         "remove-note": lambda args: bot_functions.remove_note_command(args, book),
+        "add-note": lambda args: bot_functions.add_note_command(args, book),
         "edit-note": lambda args: bot_functions.edit_note_command(args, book),
         "list-notes": lambda args: bot_functions.list_notes_command(args, book),
         "find-notes": lambda args: bot_functions.find_notes_command(args, book),
