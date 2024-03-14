@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from objects.Record import Record
 from objects.AddressBook import AddressBook
 
@@ -38,7 +38,12 @@ def birthdays_command(args, book: AddressBook):
     if not args or not args[0].isdigit():
         return "Usage: birthdays [number_of_days]"
     days = int(args[0])
-    return book.get_birthdays_in_next_days(days)
+    birthdays_list = book.get_birthdays_in_next_days(days)
+    if birthdays_list:
+        formatted_birthdays = "\n".join([f"{birthday.strftime('%A: %d.%m.%Y')}: {name}" for name, birthday in birthdays_list])
+        return formatted_birthdays
+    else:
+        return "No birthdays in the next specified days."
 
 def search_contacts_command(args, book: AddressBook):
     if len(args) != 1:

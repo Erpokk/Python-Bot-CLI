@@ -11,7 +11,7 @@ def main():
     save_service = SaveService()
     book = AddressBook(save_service)
     notes = Note(save_service)
-    
+
     commands = {
         "add": lambda args: bot_functions.add_contact_command(args, book),
         "edit": lambda args: bot_functions.edit_contact_command(args, book),
