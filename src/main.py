@@ -27,7 +27,7 @@ def main():
         "add-note": lambda args: bot_functions.add_notes_command(args, notes),
         "remove-note": lambda args: bot_functions.remove_notes_command(args, notes),
         "edit-note": lambda args: bot_functions.edit_notes_command(args, notes),
-        "list-notes": lambda args: bot_functions.list_notes_command(args, notes),
+        "notes": lambda args: bot_functions.list_notes_command(args, notes),
         "find-notes": lambda args: bot_functions.find_notes_command(args, notes)
     }
     

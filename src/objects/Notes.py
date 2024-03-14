@@ -1,18 +1,26 @@
 from servises.SaveService import SaveService
 
 class Notes:
+    
+    name_for_save = "notes"
+    
     def __init__(self, save_service: SaveService):
         self._save_service = save_service
-        self.notes = save_service.load('notes')
+        
+        loaded_data = save_service.load(Notes.name_for_save)
+        if loaded_data == None:
+            self.notes = []
+        else:
+            self.notes = loaded_data
 
     def add_notes(self, note):
         self.notes.append(note)
-        self._save_service.save('notes', self.notes)
+        self._save_service.save(Notes.name_for_save, self.notes)
 
     def edit_notes(self, note_id, new_note):
         if 0 <= note_id < len(self.notes):
             self.notes[note_id] = new_note
-            self._save_service.save('notes', self.notes)
+            self._save_service.save(Notes.name_for_save, self.notes)
             return "Note updated."
         else:
             return "Note not found."
@@ -20,7 +28,7 @@ class Notes:
     def remove_notes(self, note_id):
         if 0 <= note_id < len(self.notes):
             del self.notes[note_id]
-            self._save_service.save('notes', self.notes)
+            self._save_service.save(Notes.name_for_save, self.notes)
             return "Note removed."
         else:
             return "Note not found."
