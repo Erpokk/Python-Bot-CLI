@@ -11,7 +11,7 @@ class Record:
         self.birthday = Birthday(birthday) if birthday else None
         self.address = Address(address) if address else None
         self.email = Email(email) if email else None
-        self.notes = []  # Додавання атрибута для зберігання нотаток
+        self.comment = ""
 
     def add_phone(self, phone):
         if any(phone.value == p.value for p in self.phones):
@@ -31,27 +31,15 @@ class Record:
     def add_birthday(self, birthday):
         self.birthday = Birthday(birthday)
 
-    # Методи для роботи з нотатками
-    def add_note(self, text):
-        self.notes.append(text)
+  
+    def add_comment(self, text):
+        self.comment = text
 
-    def edit_note(self, index, new_text):
-        try:
-            self.notes[index] = new_text
-        except IndexError:
-            return "Note not found."
+    def remove_comment(self):
+        self.comment = ""
 
-    def remove_note(self, index):
-        try:
-            del self.notes[index]
-        except IndexError:
-            return "Note not found."
-
-    def list_notes(self):
-        return self.notes
-
-    def find_notes(self, text):
-        return [note for note in self.notes if text.lower() in note.lower()]
+    def show_comment(self):
+        return self.comment
 
     def get_details(self):
         details = f"Name: {self.name.value}\n"
@@ -59,7 +47,6 @@ class Record:
         details += f"Address: {self.address.value if self.address else 'No address.'}\n"
         details += f"Email: {self.email.value if self.email else 'No email.'}\n"
         details += f"Birthday: {self.birthday.value.strftime('%d.%m.%Y') if self.birthday else 'Not provided'}\n"
-        if self.notes:
-            notes_str = "\n".join([f"{idx + 1}: {note}" for idx, note in enumerate(self.notes)])
-            details += f"Notes:\n{notes_str}"
+        details += f"Comment: {self.comment}"
+            
         return details
