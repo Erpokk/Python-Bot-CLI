@@ -1,5 +1,5 @@
 from objects.AddressBook import AddressBook
-from objects.Note import Note
+from objects.Notes import Notes
 from servises.SaveService import SaveService
 import bot_functions
 
@@ -10,7 +10,7 @@ def main():
     
     save_service = SaveService()
     book = AddressBook(save_service)
-    notes = Note(save_service)
+    notes = Notes(save_service)
     
     commands = {
         "add": lambda args: bot_functions.add_contact_command(args, book),
@@ -21,12 +21,17 @@ def main():
         "all": lambda args: bot_functions.show_all_contacts_command(args, book),
         "search": lambda args: bot_functions.search_contacts_command(args, book),
         
-        "remove-note": lambda args: bot_functions.remove_note_command(args, book),
-        "add-note": lambda args: bot_functions.add_note_command(args, book),
-        "edit-note": lambda args: bot_functions.edit_note_command(args, book),
-        "list-notes": lambda args: bot_functions.list_notes_command(args, book),
-        "find-notes": lambda args: bot_functions.find_notes_command(args, book),
+        "add-comment": lambda args: bot_functions.add_comment_command(args, book),
+        "remove-comment": lambda args: bot_functions.remove_comment_command(args, book),
+        
+        "add-note": lambda args: bot_functions.add_notes_command(args, notes),
+        "remove-note": lambda args: bot_functions.remove_notes_command(args, notes),
+        "edit-note": lambda args: bot_functions.edit_notes_command(args, notes),
+        "list-notes": lambda args: bot_functions.list_notes_command(args, notes),
+        "find-notes": lambda args: bot_functions.find_notes_command(args, notes)
     }
+    
+    
 
     print("Welcome to the assistant bot!")
     while True:

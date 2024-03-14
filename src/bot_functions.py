@@ -1,8 +1,8 @@
 from datetime import datetime
 from objects.Record import Record
 from objects.AddressBook import AddressBook
+from objects.Notes import Notes
 
-#dfdfdfdfdfdf df df
 
 def input_error(func):
     def inner(*args, **kwargs):
@@ -68,65 +68,48 @@ def hello_command(args):
 def show_all_contacts_command(args, book: AddressBook):
     return book.get_all_contacts()
 
-# Функції для обробки команд нотаток
-def add_note_command(args, book: AddressBook):
+
+def add_comment_command(args, book: AddressBook):
     if len(args) < 2:
-        return "Usage: add_note [name] [note_text]"
+        return "Usage: add_note [name] [comment_text]"
     name, note_text = args[0], " ".join(args[1:])
-    record = book.get_record(name)
-    if record:
-        record.add_note(note_text)
-        return "Note added."
-    else:
-        return "Record not found."
+    return book.add_comment(name, note_text)
+  
 
-def remove_note_command(args, book: AddressBook):
-    if len(args) != 2 or not args[1].isdigit():
-        return "Usage: remove-note [name] [note_index]"
-    name, note_index = args[0], int(args[1]) - 1  # Зверніть увагу на віднімання 1, щоб врахувати індексацію з нуля
-    record = book.get_record(name)
-    if record:
-        result = record.remove_note(note_index)
-        return result if result else "Note removed."
-    else:
-        return "Record not found."
-
-def edit_note_command(args, book: AddressBook):
-    if len(args) < 3 or not args[1].isdigit():
-        return "Usage: edit_note [name] [note_index] [new_text]"
-    name, note_index, new_text = args[0], int(args[1]) - 1, " ".join(args[2:])
-    record = book.get_record(name)
-    if record:
-        result = record.edit_note(note_index, new_text)
-        return result if result else "Note updated."
-    else:
-        return "Record not found."
-
-def list_notes_command(args, book: AddressBook):
-    if len(args) < 1:
-        return "Usage: list_notes [name]"
+def remove_comment_command(args, book: AddressBook):
+    if len(args) != 1:
+        return "Usage: remove-note [name]"
     name = args[0]
-    record = book.get_record(name)
-    if record:
-        notes = record.list_notes()
-        if notes:
-            return "\n".join([f"{idx + 1}: {note}" for idx, note in enumerate(notes)])
-        else:
-            return "No notes for this record."
-    else:
-        return "Record not found."
+    return book.remove_comment(name)
+    
 
-def find_notes_command(args, book: AddressBook):
+def add_notes_command(args, notes_dif: Notes):
+    note_text = " ".join(args)
+    notes_dif.add_notes(note_text)
+    return "Note added."
+
+def edit_notes_command(args, notes_dif: Notes):
     if len(args) < 2:
-        return "Usage: find_notes [name] [search_text]"
-    name, search_text = args[0], " ".join(args[1:])
-    record = book.get_record(name)
-    if record:
-        found_notes = record.find_notes(search_text)
-        if found_notes:
-            return "\n".join([f"{idx + 1}: {note}" for idx, note in enumerate(found_notes)])
-        else:
-            return "No matching notes found."
-    else:
-        return "Record not found."
+        return "Usage: edit-notes [note_id] [new_note]"
+
+    try:
+        note_id = int(args[0]) - 1  # Перетворення в індекс Python
+        new_note = " ".join(args[1:])
+        return notes_dif.edit_notes(note_id, new_note)
+    except ValueError:
+        return "Invalid note ID."
+    
+def remove_notes_command(args, notes_dif: Notes):
+    try:
+        note_id = int(args[0]) - 1  # Перетворення в індекс Python
+        return notes_dif.remove_notes(note_id)
+    except ValueError:
+        return "Invalid note ID."
+
+def list_notes_command(args, notes_dif: Notes):
+    return notes_dif.list_notes_command()
+
+def find_notes_command(args, notes_dif: Notes):
+    search_text = " ".join(args)
+    return notes_dif.find_notes_command(search_text)
     
