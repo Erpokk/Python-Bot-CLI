@@ -22,23 +22,27 @@ class AddressBook:
         self._records[record.name.value] = record
         self._save_service.save(AddressBook.name_for_save, self._records)
 
-    def get_record(self, name):
-        return self._records.get(name)
+    def add_record(self, record):
+        self._records[record.name.value] = record
 
     def get_all_contacts(self):
         return "\n\n".join([record.get_details() for name, record in self._records.items()])
 
     def get_birthdays_in_next_days(self, days):
         today = datetime.now().date()
-        upcoming_birthdays = dict(list)
-        for name, record in self._records.items():
+        upcoming_birthdays = []
+        for record in self._records.values():
             if record.birthday:
-                birthday_this_year = record.birthday.date.replace(year=today.year)
-                delta = (birthday_this_year - today).days
-                if 0 <= delta < days:
-                    upcoming_birthdays[birthday_this_year.strftime("%d.%m.%Y")].append(name)
-        return "\n".join([f"{date}: {', '.join(names)}" for date, names in upcoming_birthdays.items()])
-
+                birthday_date = record.birthday.date
+                next_birthday = birthday_date.replace(year=today.year)
+                if next_birthday < today:
+                    next_birthday = next_birthday.replace(year=today.year + 1)
+                days_until_birthday = (next_birthday - today).days
+                if 0 <= days_until_birthday <= days:
+                    upcoming_birthdays.append((record.name.value, next_birthday))
+                
+        return upcoming_birthdays
+    
     def search_contacts(self, search_term):
         results = []
         for name, record in self._records.items():
