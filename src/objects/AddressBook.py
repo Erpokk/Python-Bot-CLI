@@ -6,12 +6,21 @@ from objects.Email import Email
 from servises.SaveService import SaveService
 
 class AddressBook:
+    name_for_save = "book"
+    
     def __init__(self, save_service: SaveService):
-        self._records = {}  
         self._save_service = save_service
+        
+        loaded_data = save_service.load(AddressBook.name_for_save)
+        if loaded_data == None:
+            self._records = {}
+        else:
+            self._records = loaded_data
+        
 
     def add_record(self, record):
         self._records[record.name.value] = record
+        self._save_service.save(AddressBook.name_for_save, self._records)
 
     def add_record(self, record):
         self._records[record.name.value] = record
@@ -55,6 +64,8 @@ class AddressBook:
                 record.email = Email(email)
             if birthday:
                 record.birthday = Birthday(birthday)
+                
+            self._save_service.save(AddressBook.name_for_save, self._records)
             return f"Record for {name} has been updated."
         else:
             return "Record not found."
@@ -62,6 +73,7 @@ class AddressBook:
     def remove_record(self, name):
         if name in self._records:
             del self._records[name]
+            self._save_service.save(AddressBook.name_for_save, self._records)
             return f"Record for {name} has been removed."
         else:
             return "Record not found."
@@ -70,6 +82,7 @@ class AddressBook:
         record = self.get_record(name)
         if record:
             record.add_comment(comment)
+            self._save_service.save(AddressBook.name_for_save, self._records)
             return "Comment added."
         else:
             return "Record not found."
@@ -78,6 +91,7 @@ class AddressBook:
         record = self.get_record(name)
         if record:
             record.remove_comment()
+            self._save_service.save(AddressBook.name_for_save, self._records)
             return "Comment removed."
         else:
             return "Record not found."
