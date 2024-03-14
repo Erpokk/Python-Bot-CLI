@@ -65,3 +65,19 @@ class AddressBook:
             return f"Record for {name} has been removed."
         else:
             return "Record not found."
+        
+    def add_comment(self, name, comment):
+        record = self.get_record(name)
+        if record:
+            record.add_comment(comment)
+            return "Comment added."
+        else:
+            return "Record not found."
+        
+    def remove_comment(self, name):
+        record = self.get_record(name)
+        if record:
+            record.remove_comment()
+            return "Comment removed."
+        else:
+            return "Record not found."
