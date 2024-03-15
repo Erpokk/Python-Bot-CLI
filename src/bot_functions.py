@@ -23,21 +23,30 @@ def add_contact_command(args, book: AddressBook):
     """
     if len(args) < 2:
         raise ValueError("Not enough arguments. Usage: add [name] [phone] [address (optional)] [email (optional)] [birthday (optional)]")
-    name, phone = args[:2]
-    address, email, birthday = None, None, None
-    if len(args) > 2:
-        for arg in args[2:]:
-            if '@' in arg:  # Simple check to assume it's an email
-                email = arg
-            elif '.' in arg and len(arg.split('.')) == 3:  # Simple check to assume it's a date
-                try:
-                    datetime.strptime(arg, '%d.%m.%Y')  # Validate date format
-                    birthday = arg
-                except ValueError:
-                    print(f"Invalid date format for birthday: {arg}. Expected DD.MM.YYYY.")
+
+    name, phone, *other_args = args  # Разделение аргументов на имя, телефон и остальные аргументы
+
+    email = None
+    birthday = None
+    address = None
+
+    for arg in other_args:
+        if '@' in arg:  # Проверка на электронную почту
+            email = arg
+        elif '.' in arg and len(arg.split('.')) == 3:  # Проверка на дату
+            try:
+                datetime.strptime(arg, '%d.%m.%Y')  # Проверка формата даты
+                birthday = arg
+            except ValueError:
+                print(f"Invalid date format for birthday: {arg}. Expected DD.MM.YYYY.")
+        else:
+            # Если аргумент не является ни датой, ни электронной почтой, то предполагаем, что это адрес
+            if address is None:
+                address = arg
             else:
-                address = arg  # Assume any other argument is an address
-    record = Record(name, phone, birthday, address, email)
+                address += " " + arg  # Добавление аргумента к уже существующему адресу, если он есть
+
+    record = Record(name, phone,address=address, email=email, birthday=birthday)
     book.add_record(record)
     return "Contact added."
 
