@@ -4,7 +4,9 @@ from datetime import datetime
 class Birthday(Field):
     def __init__(self, value):
         super().__init__(datetime.strptime(value, '%d.%m.%Y'))
+        self.str_data = value
 
     @property
     def date(self):
         return self.value.date()
+    

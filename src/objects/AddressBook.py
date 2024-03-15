@@ -45,18 +45,21 @@ class AddressBook:
     def search_contacts(self, search_term):
         results = []
         for name, record in self._records.items():
+            
             if (search_term.lower() in name.lower() or
                 any(search_term in phone.value for phone in record.phones) or
                 (record.address and search_term.lower() in record.address.value.lower()) or
                 (record.email and search_term.lower() in record.email.value.lower())):
+                
                 results.append(record.get_details())
+                
         return "\n\n".join(results) if results else "No matching contacts found."
 
-    def edit_record(self, name, phone=None, address=None, email=None, birthday=None):
+    def edit_record(self, name, phones=[], address=None, email=None, birthday=None):
         if name in self._records:
             record = self._records[name]
-            if phone:
-                record.phones = [Phone(phone)]
+            if len(phones) > 0:
+                record.phones = [Phone(phone) for phone in phones]
             if address:
                 record.address = Address(address)
             if email:

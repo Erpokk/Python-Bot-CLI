@@ -5,9 +5,9 @@ from objects.Address import Address
 from objects.Email import Email
 
 class Record:
-    def __init__(self, name, phone=None, birthday=None, address=None, email=None):
+    def __init__(self, name, phones=None, birthday=None, address=None, email=None):
         self.name = Name(name)
-        self.phones = [Phone(phone)] if phone else []
+        self.phones = [Phone(phone) for phone in phones] if phones else []
         self.birthday = Birthday(birthday) if birthday else None
         self.address = Address(address) if address else None
         self.email = Email(email) if email else None
