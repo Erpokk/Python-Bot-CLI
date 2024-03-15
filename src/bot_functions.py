@@ -21,17 +21,20 @@ def add_contact_command(args, book: AddressBook):
     Returns:
         str: Confirmation message indicating that the contact has been added.
     """
-    if len(args) < 2:
-        raise ValueError("Not enough arguments. Usage: add [name] [phone] [address (optional)] [email (optional)] [birthday (optional)]")
+    if len(args) < 1:
+        raise ValueError("Not enough arguments. Usage: add [name] [phone phone] [address (optional)] [email (optional)] [birthday (optional)]")
 
-    name, phone, *other_args = args  # Разделение аргументов на имя, телефон и остальные аргументы
+    name, *other_args = args  # Разделение аргументов на имя и остальные аргументы
 
+    phones = []
     email = None
     birthday = None
     address = None
 
     for arg in other_args:
-        if '@' in arg:  # Проверка на электронную почту
+        if arg.isdigit() == True and len(arg) > 4:
+            phones.append(arg)
+        elif '@' in arg:  # Проверка на электронную почту
             email = arg
         elif '.' in arg and len(arg.split('.')) == 3:  # Проверка на дату
             try:
@@ -46,7 +49,7 @@ def add_contact_command(args, book: AddressBook):
             else:
                 address += " " + arg  # Добавление аргумента к уже существующему адресу, если он есть
 
-    record = Record(name, phone,address=address, email=email, birthday=birthday)
+    record = Record(name, phones=phones, address=address, email=email, birthday=birthday)
     book.add_record(record)
     return "Contact added."
 
@@ -89,14 +92,34 @@ def edit_contact_command(args, book: AddressBook):
     Returns:
         str: Confirmation message indicating that the contact has been edited.
     """
-    if len(args) < 2:
+    if len(args) < 1:
         return "Usage: edit [name] [phone (optional)] [address (optional)] [email (optional)] [birthday (optional)]"
-    name = args[0]
-    phone = args[1] if len(args) > 1 else None
-    address = args[2] if len(args) > 2 else None
-    email = args[3] if len(args) > 3 else None
-    birthday = args[4] if len(args) > 4 else None
-    return book.edit_record(name, phone, address, email, birthday)
+    
+    name, *other_args = args
+    phones = []
+    email = None
+    birthday = None
+    address = None
+
+    for arg in other_args:
+        if arg.isdigit() == True and len(arg) > 4:
+            phones.append(arg)
+        elif '@' in arg:  # Проверка на электронную почту
+            email = arg
+        elif '.' in arg and len(arg.split('.')) == 3:  # Проверка на дату
+            try:
+                datetime.strptime(arg, '%d.%m.%Y')  # Проверка формата даты
+                birthday = arg
+            except ValueError:
+                print(f"Invalid date format for birthday: {arg}. Expected DD.MM.YYYY.")
+        else:
+            # Если аргумент не является ни датой, ни электронной почтой, то предполагаем, что это адрес
+            if address is None:
+                address = arg
+            else:
+                address += " " + arg  # Добавление аргумента к уже существующему адресу, если он есть
+    
+    return book.edit_record(name, phones, address, email, birthday)
 
 def remove_contact_command(args, book: AddressBook):
     """
