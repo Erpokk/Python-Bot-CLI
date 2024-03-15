@@ -27,12 +27,12 @@ def main():
         "remove-note": lambda args: bot_functions.remove_notes_command(args, notes),
         "edit-note": lambda args: bot_functions.edit_notes_command(args, notes),
         "notes": lambda args: bot_functions.list_notes_command(args, notes),
-        "find-notes": lambda args: bot_functions.find_notes_command(args, notes)
-    }
+        "find-notes": lambda args: bot_functions.find_notes_command(args, notes),
+        "help": lambda args: bot_functions.help(commands),
+        }
     
     autocommand = list(commands.keys()) + ["close", "exit"]
-
-    print("Welcome to the assistant bot!")
+    
     while True:
         user_input = prompt("Enter a command: ", completer=MyCompleter(autocommand)).lower().split()
         command, args = user_input[0], user_input[1:]
@@ -49,6 +49,8 @@ def main():
         result = handler(args)
         if result:
             print(result)
+        
+
 
 if __name__ == "__main__":
     main()
