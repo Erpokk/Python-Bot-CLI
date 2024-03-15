@@ -8,7 +8,17 @@ from servises.CompleterService import MyCompleter
 
 
 def main():
-    
+    """
+    Main function to run the console bot assistant.
+
+    This function initializes the necessary objects, such as the SaveService, AddressBook, and Notes.
+    It also defines a dictionary of commands mapped to their corresponding functions.
+    The user is prompted to enter a command, and the appropriate handler function is called based on the input.
+    The loop continues until the user enters either 'exit' or 'close'.
+
+    Returns:
+        None
+    """
     save_service = SaveService()
     book = AddressBook(save_service)
     notes = Notes(save_service)
