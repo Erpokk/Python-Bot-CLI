@@ -5,6 +5,15 @@ from objects.Notes import Notes
 
 
 def input_error(func):
+    """
+    Decorator function to handle input errors gracefully by returning the error message as a string.
+
+    Args:
+        func (callable): The function to be decorated.
+
+    Returns:
+        callable: Decorated function.
+    """
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -98,9 +107,9 @@ def edit_contact_command(args, book: AddressBook):
     name, *other_args = args
     phones = []
     email = None
-    birthday = None
     address = None
-
+    birthday = None
+    
     for arg in other_args:
         if arg.isdigit() == True and len(arg) > 4:
             phones.append(arg)
@@ -227,6 +236,7 @@ def remove_notes_command(args, notes_dif: Notes):
     except ValueError:
         return "Invalid note ID."
 
+
 def list_notes_command(args, notes_dif: Notes):
     """
     Returns a list of all notes.
@@ -249,6 +259,15 @@ def find_notes_command(args, notes_dif: Notes):
     return notes_dif.find_notes_command(search_text)
 
 def help(commands_dict):
+    """
+    Display help information for available commands along with their docstrings.
+
+    Args:
+        commands_dict (dict): A dictionary mapping command names to their corresponding functions.
+
+    Returns:
+        None
+    """
     commands_dict = {
     "add": add_contact_command,
     "edit": edit_contact_command,
