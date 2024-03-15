@@ -16,14 +16,13 @@ class AddressBook:
             self._records = {}
         else:
             self._records = loaded_data
-        
+
+    def get_record(self, name):
+        return self._records.get(name)  
 
     def add_record(self, record):
         self._records[record.name.value] = record
         self._save_service.save(AddressBook.name_for_save, self._records)
-
-    def add_record(self, record):
-        self._records[record.name.value] = record
 
     def get_all_contacts(self):
         return "\n\n".join([record.get_details() for name, record in self._records.items()])
