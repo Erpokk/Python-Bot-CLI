@@ -109,7 +109,10 @@ class AddressBook:
                 (record.email and search_term.lower() in record.email.value.lower())):
                 
                 results.append(record.get_details())
-                
+            if record.birthday:
+                if search_term in record.birthday.str_data:
+                    results.append(record.get_details())
+            
         return "\n\n".join(results) if results else "No matching contacts found."
 
     def edit_record(self, name, phones=[], address=None, email=None, birthday=None):
