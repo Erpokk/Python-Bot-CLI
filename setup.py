@@ -13,7 +13,7 @@ setup(
     author="Group-8",
     author_email="dontwriteme@gmail.com",
     packages=find_namespace_packages(),
-    entry_points={'console_scripts': ['simple-cli-bot = main:main']},
+    entry_points={'console_scripts': ['bot = src.main:main']},
     install_requires=["prompt_toolkit"],
     keywords='cli bot console assistant contacts notes',
     python_requires='>=3.7',
